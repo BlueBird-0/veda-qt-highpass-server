@@ -31,6 +31,7 @@ private slots:
 
 signals:
     void signal_clikQuit();
+    void signal_stream_ui_del(stream_ui*);
 };
 
 #endif // STREAM_UI_H

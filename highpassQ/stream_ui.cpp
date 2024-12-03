@@ -22,6 +22,7 @@ stream_ui::stream_ui(QWidget *parent) :
 
 stream_ui::~stream_ui()
 {
+    emit signal_stream_ui_del(this);
     delete ui;
     delete rtpCli;
 }

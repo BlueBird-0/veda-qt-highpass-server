@@ -9,6 +9,7 @@
 #include <QMenu>
 #include <QTabWidget>
 #include <QMdiSubWindow>
+#include <QPushButton>
 
 #include "videostream.h"
 #include "ui_videostream.h"
@@ -52,57 +53,6 @@ void videoStream::slot_ffmpeg_debug(QString error,rtpClient* textedit_key)
    // ui->textEdit->append(error);
 }
 
-
-void videoStream::on_btnConnectDB_clicked()
-{
-    if (DatabaseManager::instance().connectToDatabase("/home/iam/veda_project/veda-qt-highpass-server/highpassQ/gotomars.db")) {
-        QMessageBox::information(this, "Success", "Connected to gotomars.db");
-    } else {
-        QMessageBox::critical(this, "Error", "Failed to connect to gotomars.db");
-    }
-}
-
-
-void videoStream::on_btnInsertDB_clicked()
-{
-    //todo insert test code
-    QString entryTime = QString("202411201550");
-    QString plateNumber = QString("ABC1234");
-    int gateNumber = rand()%100;
-
-    if (DatabaseManager::instance().addHighPassRecord(getCurrentFormattedTime(), plateNumber, gateNumber)) {
-        QMessageBox::information(this, "Success", "Record inserted successfully.");
-    } else {
-        QMessageBox::critical(this, "Error", "Failed to insert record.");
-    }
-}
-
-
-void videoStream::on_btnSearchDB_clicked()
-{
-    ui->textEdit_2->setText("");
-    QList<QVariantMap> records = DatabaseManager::instance().getAllRecords();
-    if (records.isEmpty()) {
-        QMessageBox::information(this, "Plate Records", "No records found.");
-    } else {
-        //QStringList recordStrList;
-
-        // QList<QVariantMap>의 각 레코드를 문자열로 변환하여 QStringList에 추가
-        for (const QVariantMap &record : records) {
-            QString recordStr = QString("ID: %1, EntryTime: %2, PlateNumber: %3, GateNumber: %4")
-                                .arg(record["ID"].toInt())
-                                .arg(record["EntryTime"].toString())
-                                .arg(record["PlateNumber"].toString())
-                                .arg(record["GateNumber"].toInt());
-            ui->textEdit_2->append(recordStr);
-        }
-        ui->textEdit_2->append("\n");
-        // 레코드를 줄바꿈으로 구분하여 메시지 박스에 표시
-       // QString recordStr = recordStrList.join("\n");
-        //QMessageBox::information(this, "Plate Records", recordStr);
-    }
-}
-
 void videoStream:: showContextMenu(const QPoint& pos) {
     QMenu menu(this);
     QAction* addTabAction = menu.addAction("Add Tab");
@@ -112,19 +62,60 @@ void videoStream:: showContextMenu(const QPoint& pos) {
 }
 
  void videoStream:: addNewTab() {
-    //QMdiSubWindow* newWidget = new QMdiSubWindow();
-    stream_ui* newTab = new stream_ui();
-    newTab->resize(640, 480);
-     //newWidget->setWidget(newTab);
-    //QString tabName = QString("CAM %1").arg(ui->tabWidget_2->count());
-    //ui->tabWidget_2->addTab(newTab, tabName);
-    newTab->setWindowTitle(QString("CAM %1").arg(ui->mdiArea->subWindowList().size()+1));
-    ui->mdiArea->addSubWindow(newTab);
-    newTab->show();
-    QTextEdit *newDebug = new QTextEdit();
-    ui->tabWidget->addTab(newDebug,QString("CAM %1").arg(ui->mdiArea->subWindowList().size()));
-    connect(newTab->rtpCli,SIGNAL(signal_ffmpeg_debug(QString,rtpClient*)),this,SLOT(slot_ffmpeg_debug(QString,rtpClient*)));
-    map_textedit.insert(newTab->rtpCli,newDebug);
-     qDebug() << "Created new tab with stream_ui object at address: " << newTab;
-    //newTab->show();
+     stream_ui* newTab = new stream_ui();
+       newTab->setWindowTitle(QString("CAM %1").arg(ui->mdiArea->subWindowList().lastIndexOf(ui->mdiArea->subWindowList().last()) + 2));
+       ui->mdiArea->addSubWindow(newTab);
+       newTab->show();
+
+       // Create the QWidget for the tab content (this will be added to the tab widget)
+       QWidget* tabContentWidget = new QWidget();  // This widget will hold the QTextEdit and buttons
+       QVBoxLayout* layout = new QVBoxLayout(tabContentWidget);
+
+       // Create the QTextEdit widget
+       QTextEdit* newDebug = new QTextEdit();
+       newDebug->setMinimumHeight(100); // Adjust height to make space for the buttons
+       layout->addWidget(newDebug); // Add QTextEdit to the layout
+
+       // Create the button layout (horizontal)
+       QWidget* buttonWidget = new QWidget();
+       QHBoxLayout* buttonLayout = new QHBoxLayout(buttonWidget);
+
+       // Create 3 buttons and add them to the horizontal layout
+       QPushButton* button1 = new QPushButton("Button 1");
+       QPushButton* button2 = new QPushButton("Button 2");
+       QPushButton* button3 = new QPushButton("Button 3");
+
+       buttonLayout->addWidget(button1);
+       buttonLayout->addWidget(button2);
+       buttonLayout->addWidget(button3);
+
+       // Add the button widget to the main layout
+       layout->addWidget(buttonWidget);
+
+       // Add this tab content widget (with QTextEdit and buttons) to the tab widget
+       ui->tabWidget->addTab(tabContentWidget, QString("%1").arg(newTab->windowTitle()));
+
+       // Optionally, add the new tab to the debug map for tracking
+       map_textedit.insert(newTab->rtpCli, newDebug);
+       map_stream_ui.insert(newTab, newDebug);
+
+       connect(newTab->rtpCli, SIGNAL(signal_ffmpeg_debug(QString, rtpClient*)), this, SLOT(slot_ffmpeg_debug(QString, rtpClient*)));
+       connect(newTab, SIGNAL(signal_stream_ui_del(stream_ui*)), this, SLOT(slot_tab_del(stream_ui*)));
+
+       qDebug() << "Created new tab with stream_ui object at address: " << newTab;
 }
+ void videoStream::slot_tab_del(stream_ui* delIndex)
+ {
+     // Ensure the corresponding QTextEdit is deleted
+     if (map_stream_ui.contains(delIndex)) {
+         map_stream_ui[delIndex]->deleteLater();  // Delay the deletion of QTextEdit
+         map_stream_ui.remove(delIndex);  // Remove from map
+     }
+     if (map_textedit.contains(delIndex->rtpCli)) {
+         map_textedit[delIndex->rtpCli]->deleteLater();  // Delay the deletion of the debug QTextEdit
+         map_textedit.remove(delIndex->rtpCli);  // Remove from map
+     }
+
+     // Optionally remove the stream_ui object from the UI
+    delIndex->deleteLater();
+ }

@@ -5,6 +5,8 @@
 #include <QMap>
 class QTextEdit;
 class rtpClient;
+class stream_ui;
+
 namespace Ui {
 class videoStream;
 }
@@ -20,17 +22,13 @@ public:
 private slots:
 
     void slot_ffmpeg_debug(QString error,rtpClient* textedit_key);
-
-    void on_btnConnectDB_clicked();
-
-    void on_btnInsertDB_clicked();
-
-    void on_btnSearchDB_clicked();
     void showContextMenu(const QPoint& pos);
     void addNewTab();
+    void slot_tab_del(stream_ui*);
 private:
     Ui::videoStream *ui;
     QMap <rtpClient*,QTextEdit*> map_textedit;
+    QMap <stream_ui*, QTextEdit*> map_stream_ui;
 signals:
     //void signal_clikQuit();
    // void send_url(QString url);

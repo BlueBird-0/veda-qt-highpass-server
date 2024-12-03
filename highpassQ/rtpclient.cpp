@@ -13,6 +13,19 @@ rtpClient* rtpClient::instance() {
 rtpClient::rtpClient() {
     buffer = new QByteArray;
 }
+rtpClient::~rtpClient()
+{
+   qDebug() <<"!!!!~rtpCLient()!!!!!";
+   if(ffmpegProcess)
+   {
+       ffmpegProcess->terminate();
+       if(!ffmpegProcess->waitForFinished(3000))
+       {
+           ffmpegProcess->kill();
+       }
+   }
+    qDebug()<<"!!!rtpCLient finished!!!!";
+}
 
 void rtpClient::readFFmpegOutput() {
     QByteArray data = ffmpegProcess->readAllStandardOutput();
@@ -111,16 +124,5 @@ void rtpClient::startFFmpegProcess(QString url) {
         qDebug() << "FFmpeg 스트리밍 시작 중...";
         emit signal_streaming_start();
         QObject::connect(ffmpegProcess, SIGNAL(readyReadStandardOutput()), this, SLOT(readFFmpegOutput()));
-    }
-}
-void rtpClient::slot_quitBtn()
-{
-    if(ffmpegProcess)
-    {
-        ffmpegProcess->terminate();
-        if(!ffmpegProcess->waitForFinished(3000))
-        {
-            ffmpegProcess->kill();
-        }
     }
 }
