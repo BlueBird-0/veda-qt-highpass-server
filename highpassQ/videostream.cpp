@@ -2,7 +2,6 @@
 #include <QtSql/QSqlDatabase>
 #include <QtSql/QSqlQuery>
 #include <QtSql/QSqlError>
-#include "DatabaseManager.h"
 #include <QMessageBox>
 #include <QDateTime>
 #include <QString>
@@ -14,8 +13,6 @@
 #include "videostream.h"
 #include "ui_videostream.h"
 #include "rtpclient.h"
-#include "DatabaseManager.h"
-#include "httpserver.h"
 #include "stream_ui.h"
 
 
@@ -67,6 +64,8 @@ void videoStream:: showContextMenu(const QPoint& pos) {
        ui->mdiArea->addSubWindow(newTab);
        newTab->show();
 
+       // 이후 최소 크기 제한 해제
+       //setMinimumSize(0, 0);
        // Create the QWidget for the tab content (this will be added to the tab widget)
        QWidget* tabContentWidget = new QWidget();  // This widget will hold the QTextEdit and buttons
        QVBoxLayout* layout = new QVBoxLayout(tabContentWidget);
@@ -81,9 +80,9 @@ void videoStream:: showContextMenu(const QPoint& pos) {
        QHBoxLayout* buttonLayout = new QHBoxLayout(buttonWidget);
 
        // Create 3 buttons and add them to the horizontal layout
-       QPushButton* button1 = new QPushButton("Button 1");
-       QPushButton* button2 = new QPushButton("Button 2");
-       QPushButton* button3 = new QPushButton("Button 3");
+       QPushButton* button1 = new QPushButton("Pause");
+       QPushButton* button2 = new QPushButton("Restart");
+       QPushButton* button3 = new QPushButton("Disconnect");
 
        buttonLayout->addWidget(button1);
        buttonLayout->addWidget(button2);
@@ -91,13 +90,12 @@ void videoStream:: showContextMenu(const QPoint& pos) {
 
        // Add the button widget to the main layout
        layout->addWidget(buttonWidget);
-
        // Add this tab content widget (with QTextEdit and buttons) to the tab widget
        ui->tabWidget->addTab(tabContentWidget, QString("%1").arg(newTab->windowTitle()));
 
        // Optionally, add the new tab to the debug map for tracking
        map_textedit.insert(newTab->rtpCli, newDebug);
-       map_stream_ui.insert(newTab, newDebug);
+       map_stream_ui.insert(newTab, tabContentWidget);
 
        connect(newTab->rtpCli, SIGNAL(signal_ffmpeg_debug(QString, rtpClient*)), this, SLOT(slot_ffmpeg_debug(QString, rtpClient*)));
        connect(newTab, SIGNAL(signal_stream_ui_del(stream_ui*)), this, SLOT(slot_tab_del(stream_ui*)));
@@ -106,8 +104,11 @@ void videoStream:: showContextMenu(const QPoint& pos) {
 }
  void videoStream::slot_tab_del(stream_ui* delIndex)
  {
+     //delIndex->rtpCli->finishFfmpeg();
      // Ensure the corresponding QTextEdit is deleted
      if (map_stream_ui.contains(delIndex)) {
+         QWidget* del_widget = map_stream_ui[delIndex];
+         del_widget->layout()->deleteLater();
          map_stream_ui[delIndex]->deleteLater();  // Delay the deletion of QTextEdit
          map_stream_ui.remove(delIndex);  // Remove from map
      }

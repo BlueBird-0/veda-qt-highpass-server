@@ -28,7 +28,7 @@ private slots:
 private:
     Ui::videoStream *ui;
     QMap <rtpClient*,QTextEdit*> map_textedit;
-    QMap <stream_ui*, QTextEdit*> map_stream_ui;
+    QMap <stream_ui*, QWidget*> map_stream_ui;
 signals:
     //void signal_clikQuit();
    // void send_url(QString url);

@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include "rtpclient.h"
+class  HttpClient;
 namespace Ui {
 class stream_ui;
 }
@@ -19,7 +20,7 @@ public:
 private:
     Ui::stream_ui *ui;
     QString url;
-
+    HttpClient*httpCli;
 protected:
     void resizeEvent(QResizeEvent *event) override;
 private slots:

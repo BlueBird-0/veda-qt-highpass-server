@@ -8,7 +8,7 @@
 #include "ui_stream_ui.h"
 #include "videostream.h"
 #include "ui_videostream.h"
-
+#include "httpclient.h"
 stream_ui::stream_ui(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::stream_ui)
@@ -17,14 +17,19 @@ stream_ui::stream_ui(QWidget *parent) :
     ui->widget_3->hide();
     url="";
     rtpCli = new rtpClient();
+    httpCli = new HttpClient(this);
     rtpCli->videoLabel = ui->video_label;
 }
 
 stream_ui::~stream_ui()
 {
+    qDebug()<<"~stream_ui()";
     emit signal_stream_ui_del(this);
+    rtpCli->finishFfmpeg();
     delete ui;
     delete rtpCli;
+    delete httpCli;
+     qDebug()<<"~stream_ui() finished!!";
 }
 
 
@@ -34,9 +39,8 @@ void stream_ui::on_startBtn_clicked()
     connect(rtpCli,SIGNAL(signal_streaming_start()),this,SLOT(slot_streaming_start()));
     connect(rtpCli,SIGNAL(signal_video_start()),this,SLOT(slot_video_start()));
     connect(rtpCli,SIGNAL(signal_stream_fail()),this,SLOT(slot_streaming_fail()));
-    connect(this,SIGNAL(signal_clikQuit()),rtpCli,SLOT(slot_quitBtn()));
-
-
+    //connect(this,SIGNAL(signal_clikQuit()),rtpCli,SLOT(slot_quitBtn()));
+    httpCli->addCamera(ui->lineEdit_2->text(),ui->lineEdit->text());
     url = ui->lineEdit->text();
     //emit send_url(url);
     rtpCli->startFFmpegProcess(url);

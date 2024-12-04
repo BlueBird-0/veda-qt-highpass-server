@@ -16,13 +16,12 @@ rtpClient::rtpClient() {
 rtpClient::~rtpClient()
 {
    qDebug() <<"!!!!~rtpCLient()!!!!!";
-   if(ffmpegProcess)
-   {
-       ffmpegProcess->terminate();
-       if(!ffmpegProcess->waitForFinished(3000))
-       {
-           ffmpegProcess->kill();
+   if (ffmpegProcess) {
+       if (ffmpegProcess->state() != QProcess::NotRunning) {
+           qDebug() << "Waiting for FFmpeg to finish...";
+           finishFfmpeg(); // 안전한 종료 호출
        }
+       delete ffmpegProcess;
    }
     qDebug()<<"!!!rtpCLient finished!!!!";
 }
@@ -114,9 +113,9 @@ void rtpClient::startFFmpegProcess(QString url) {
                 emit signal_ffmpeg_debug("FFmpeg error output:"+errorOutput,this);
             }
             emit signal_ffmpeg_debug("FFmpeg error output:"+errorOutput,this);
+           // qDebug()<<"ffmepg debug : "<<errorOutput;
         }
     });
-
 
     if (!ffmpegProcess->waitForStarted()) {
         qDebug() << "FFmpeg 실행 실패: " << ffmpegProcess->errorString();
@@ -124,5 +123,16 @@ void rtpClient::startFFmpegProcess(QString url) {
         qDebug() << "FFmpeg 스트리밍 시작 중...";
         emit signal_streaming_start();
         QObject::connect(ffmpegProcess, SIGNAL(readyReadStandardOutput()), this, SLOT(readFFmpegOutput()));
+    }
+}
+void rtpClient::finishFfmpeg()
+{
+    if(ffmpegProcess)
+    {
+        ffmpegProcess->terminate();
+        if(!ffmpegProcess->waitForFinished(3000))
+        {
+            ffmpegProcess->kill();
+        }
     }
 }

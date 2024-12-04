@@ -3,13 +3,10 @@
 #include <QtSql/QSqlDatabase>
 #include <QtSql/QSqlQuery>
 #include <QtSql/QSqlError>
-#include "DatabaseManager.h"
 #include <QMessageBox>
 #include <QDateTime>
 #include <QString>
 
-#include "DatabaseManager.h"
-#include "httpserver.h"
 #include "videostream.h"
 
 MainWindow::MainWindow(QWidget *parent)

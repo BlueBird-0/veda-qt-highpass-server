@@ -4,6 +4,7 @@
 #include <QObject>
 class QProcess;
 class QLabel;
+
 class rtpClient : public QObject {
 Q_OBJECT
 
@@ -15,8 +16,7 @@ public:
     rtpClient &operator=(const rtpClient &) = delete;
     // FFmpeg 프로세스 시작 및 데이터 읽기 메서드
     void startFFmpegProcess(QString url);
-
-
+     void finishFfmpeg();
     // FFmpeg 프로세스 관리용 변수
     QProcess *ffmpegProcess = nullptr;
     QLabel *videoLabel = nullptr;
@@ -27,6 +27,7 @@ private:
     //QString streaming_url;
 public slots:
     void readFFmpegOutput();
+
    // void recv_url(QString url);
 signals:
     void signal_ffmpeg_debug(QString,rtpClient*);

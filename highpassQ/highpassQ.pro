@@ -9,9 +9,8 @@ CONFIG += c++17
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-    DatabaseManager.cpp \
     carregister.cpp \
-    httpserver.cpp \
+    httpclient.cpp \
     main.cpp \
     mainwindow.cpp \
     rtpclient.cpp \
@@ -19,9 +18,8 @@ SOURCES += \
     videostream.cpp
 
 HEADERS += \
-    DatabaseManager.h \
     carregister.h \
-    httpserver.h \
+    httpclient.h \
     mainwindow.h \
     rtpclient.h \
     stream_ui.h \
