@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include <QMap>
+class HttpClient;
 class QTextEdit;
 class rtpClient;
 class stream_ui;
@@ -25,11 +26,17 @@ private slots:
     void showContextMenu(const QPoint& pos);
     void addNewTab();
     void slot_tab_del(stream_ui*);
+    void addRegistedCam();
+
 private:
     Ui::videoStream *ui;
+    HttpClient* httpCli;
     QMap <rtpClient*,QTextEdit*> map_textedit;
     QMap <stream_ui*, QWidget*> map_stream_ui;
+    QMap <QString, QString> map_url;
+
 signals:
+    void start_stream();
     //void signal_clikQuit();
    // void send_url(QString url);
 };

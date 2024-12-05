@@ -10,6 +10,7 @@
 #include <QMdiSubWindow>
 #include <QPushButton>
 
+#include "httpclient.h"
 #include "videostream.h"
 #include "ui_videostream.h"
 #include "rtpclient.h"
@@ -22,7 +23,10 @@ videoStream::videoStream(QWidget *parent) :
 {
     ui->setupUi(this);
     ui->tabWidget_2->setContextMenuPolicy(Qt::CustomContextMenu);
+    httpCli = new HttpClient(this);
+    httpCli->loadCameras();
 
+    connect(httpCli,SIGNAL(signal_finishload()),this,SLOT(addRegistedCam()));
     connect(ui->tabWidget_2, &QTabWidget::customContextMenuRequested, this, &videoStream::showContextMenu);
 }
 
@@ -59,7 +63,7 @@ void videoStream:: showContextMenu(const QPoint& pos) {
 }
 
  void videoStream:: addNewTab() {
-     stream_ui* newTab = new stream_ui();
+     stream_ui* newTab = new stream_ui(this,httpCli);
        newTab->setWindowTitle(QString("CAM %1").arg(ui->mdiArea->subWindowList().lastIndexOf(ui->mdiArea->subWindowList().last()) + 2));
        ui->mdiArea->addSubWindow(newTab);
        newTab->show();
@@ -120,3 +124,61 @@ void videoStream:: showContextMenu(const QPoint& pos) {
      // Optionally remove the stream_ui object from the UI
     delIndex->deleteLater();
  }
+
+ void videoStream:: addRegistedCam() {
+     map_url = httpCli->getCameraUrlMap();
+     if (map_url.isEmpty()) {
+         qDebug() << "map_url is empty!";
+     } else {
+         qDebug() << "map_url contains data!";
+     }
+
+     for(QMap<QString, QString>::iterator it = map_url.begin();  it != map_url.end();it++){
+         qDebug()<<"CAM_NAME: "<<it.key();
+         qDebug()<<"CAM_URL: "<<it.value();
+     stream_ui* newTab = new stream_ui(this,httpCli,it.value());
+       newTab->setWindowTitle(it.key());
+       ui->mdiArea->addSubWindow(newTab);
+       newTab->show();
+
+       // 이후 최소 크기 제한 해제
+       //setMinimumSize(0, 0);
+       // Create the QWidget for the tab content (this will be added to the tab widget)
+       QWidget* tabContentWidget = new QWidget();  // This widget will hold the QTextEdit and buttons
+       QVBoxLayout* layout = new QVBoxLayout(tabContentWidget);
+
+       // Create the QTextEdit widget
+       QTextEdit* newDebug = new QTextEdit();
+       newDebug->setMinimumHeight(100); // Adjust height to make space for the buttons
+       layout->addWidget(newDebug); // Add QTextEdit to the layout
+
+       // Create the button layout (horizontal)
+       QWidget* buttonWidget = new QWidget();
+       QHBoxLayout* buttonLayout = new QHBoxLayout(buttonWidget);
+
+       // Create 3 buttons and add them to the horizontal layout
+       QPushButton* button1 = new QPushButton("Pause");
+       QPushButton* button2 = new QPushButton("Restart");
+       QPushButton* button3 = new QPushButton("Disconnect");
+
+       buttonLayout->addWidget(button1);
+       buttonLayout->addWidget(button2);
+       buttonLayout->addWidget(button3);
+
+       // Add the button widget to the main layout
+       layout->addWidget(buttonWidget);
+       // Add this tab content widget (with QTextEdit and buttons) to the tab widget
+       ui->tabWidget->addTab(tabContentWidget, QString("%1").arg(newTab->windowTitle()));
+
+       // Optionally, add the new tab to the debug map for tracking
+       map_textedit.insert(newTab->rtpCli, newDebug);
+       map_stream_ui.insert(newTab, tabContentWidget);
+
+       connect(newTab->rtpCli, SIGNAL(signal_ffmpeg_debug(QString, rtpClient*)), this, SLOT(slot_ffmpeg_debug(QString, rtpClient*)));
+       connect(newTab, SIGNAL(signal_stream_ui_del(stream_ui*)), this, SLOT(slot_tab_del(stream_ui*)));
+
+       qDebug() << "Created new tab with stream_ui object at address: " << newTab;
+       connect(this,SIGNAL(start_stream()),newTab,SLOT(on_startBtn_clicked()));
+       emit start_stream();
+    }
+}

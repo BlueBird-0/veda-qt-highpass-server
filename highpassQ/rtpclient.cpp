@@ -113,7 +113,7 @@ void rtpClient::startFFmpegProcess(QString url) {
                 emit signal_ffmpeg_debug("FFmpeg error output:"+errorOutput,this);
             }
             emit signal_ffmpeg_debug("FFmpeg error output:"+errorOutput,this);
-           // qDebug()<<"ffmepg debug : "<<errorOutput;
+            qDebug()<<"ffmepg debug : "<<errorOutput;
         }
     });
 

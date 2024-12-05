@@ -23,21 +23,6 @@
    <string notr="true"/>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <property name="leftMargin">
-    <number>0</number>
-   </property>
-   <property name="topMargin">
-    <number>0</number>
-   </property>
-   <property name="rightMargin">
-    <number>0</number>
-   </property>
-   <property name="bottomMargin">
-    <number>0</number>
-   </property>
-   <property name="spacing">
-    <number>0</number>
-   </property>
    <item row="0" column="0">
     <widget class="QSplitter" name="splitter_3">
      <property name="sizePolicy">
@@ -99,19 +84,19 @@ color:rgb(255, 255, 255);</string>
          <widget class="QWidget" name="horizontalLayoutWidget_3">
           <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="0">
            <property name="spacing">
-            <number>5</number>
+            <number>0</number>
            </property>
            <property name="leftMargin">
-            <number>5</number>
+            <number>0</number>
            </property>
            <property name="topMargin">
-            <number>5</number>
+            <number>0</number>
            </property>
            <property name="rightMargin">
             <number>0</number>
            </property>
            <property name="bottomMargin">
-            <number>5</number>
+            <number>0</number>
            </property>
            <item>
             <widget class="QTabWidget" name="tabWidget_2">
@@ -191,7 +176,7 @@ color:rgb(255, 255, 255);</string>
          <widget class="QWidget" name="horizontalLayoutWidget">
           <layout class="QHBoxLayout" name="horizontalLayout" stretch="0">
            <property name="spacing">
-            <number>5</number>
+            <number>0</number>
            </property>
            <property name="sizeConstraint">
             <enum>QLayout::SetDefaultConstraint</enum>
@@ -200,13 +185,13 @@ color:rgb(255, 255, 255);</string>
             <number>0</number>
            </property>
            <property name="topMargin">
-            <number>5</number>
+            <number>0</number>
            </property>
            <property name="rightMargin">
-            <number>5</number>
+            <number>0</number>
            </property>
            <property name="bottomMargin">
-            <number>5</number>
+            <number>0</number>
            </property>
            <item>
             <widget class="QTabWidget" name="tabWidget">
@@ -252,6 +237,9 @@ color:rgb(255, 255, 255);</string>
                    <property name="spacing">
                     <number>0</number>
                    </property>
+                   <property name="sizeConstraint">
+                    <enum>QLayout::SetDefaultConstraint</enum>
+                   </property>
                    <item>
                     <widget class="QLabel" name="label_2">
                      <property name="sizePolicy">
@@ -291,12 +279,21 @@ color:rgb(255, 255, 255);</string>
                    </property>
                    <item>
                     <widget class="QTextEdit" name="textEdit">
+                     <property name="font">
+                      <font>
+                       <family>Sans Serif</family>
+                       <pointsize>12</pointsize>
+                       <weight>75</weight>
+                       <italic>false</italic>
+                       <bold>true</bold>
+                      </font>
+                     </property>
                      <property name="cursor" stdset="0">
                       <cursorShape>ArrowCursor</cursorShape>
                      </property>
                      <property name="styleSheet">
                       <string notr="true">background-color: rgb(163, 163, 163);
-font: bold 8pt &quot;Sans Serif&quot;;
+font: bold 12pt &quot;Sans Serif&quot;;
 color:rgb(42, 42, 42);</string>
                      </property>
                      <property name="verticalScrollBarPolicy">
@@ -312,11 +309,12 @@ color:rgb(42, 42, 42);</string>
                       <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Sans Serif'; font-size:8pt; font-weight:600; font-style:normal;&quot;&gt;
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Sans Serif'; font-size:12pt; font-weight:600; font-style:normal;&quot;&gt;
+&lt;p align=&quot;center&quot; style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;If you want to register a new camera URL, right-click&lt;/p&gt;
 &lt;p align=&quot;center&quot; style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;If you want to register a new camera URL, right-click&lt;/span&gt;&lt;/p&gt;
-&lt;p align=&quot;center&quot; style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:12pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;If you make new Window you can see error message!&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;When you close the window, rtsp is disconnected and the window is deleted along with it.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                      </property>
                     </widget>
                    </item>

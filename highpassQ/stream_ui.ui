@@ -51,8 +51,8 @@ border: 1px solid rgb(84, 84, 84);
    <widget class="QPushButton" name="startBtn">
     <property name="geometry">
      <rect>
-      <x>290</x>
-      <y>110</y>
+      <x>286</x>
+      <y>112</y>
       <width>100</width>
       <height>30</height>
      </rect>
@@ -106,39 +106,14 @@ font: bold 9pt &quot;Sans Serif&quot;;
 background-color: rgb(91, 91, 91);</string>
     </property>
     <property name="text">
-     <string>  Notice</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_7">
-    <property name="geometry">
-     <rect>
-      <x>20</x>
-      <y>50</y>
-      <width>371</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="sizePolicy">
-     <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-      <horstretch>0</horstretch>
-      <verstretch>0</verstretch>
-     </sizepolicy>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">font: bold 13pt &quot;Sans Serif&quot;;
-color:rgb(59, 59, 59);
-border: 0px solid rgb(84, 84, 84);
-</string>
-    </property>
-    <property name="text">
-     <string>Please enter a networ URL : </string>
+     <string>New Camera register</string>
     </property>
    </widget>
    <widget class="QLineEdit" name="lineEdit">
     <property name="geometry">
      <rect>
-      <x>20</x>
-      <y>110</y>
+      <x>16</x>
+      <y>112</y>
       <width>261</width>
       <height>31</height>
      </rect>
@@ -199,39 +174,79 @@ border: 0px solid rgb(84, 84, 84);
      </property>
     </widget>
    </widget>
-   <widget class="QLabel" name="label">
+   <widget class="QLineEdit" name="lineEdit_9">
     <property name="geometry">
      <rect>
-      <x>10</x>
-      <y>90</y>
-      <width>111</width>
+      <x>112</x>
+      <y>49</y>
+      <width>271</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(255, 255, 255);</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_5">
+    <property name="geometry">
+     <rect>
+      <x>23</x>
+      <y>51</y>
+      <width>91</width>
       <height>21</height>
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">color: rgb(255, 255, 255);</string>
+     <string notr="true">color: rgb(58, 58, 58);
+font: bold 9pt &quot;Sans Serif&quot;;
+background-color: transparent;
+border: 0px solid rgb(84, 84, 84);</string>
     </property>
     <property name="text">
      <string>cam name:</string>
     </property>
    </widget>
-   <widget class="QLineEdit" name="lineEdit_2">
+   <widget class="QLabel" name="label_12">
     <property name="geometry">
      <rect>
-      <x>120</x>
-      <y>90</y>
-      <width>271</width>
-      <height>23</height>
+      <x>20</x>
+      <y>80</y>
+      <width>361</width>
+      <height>31</height>
      </rect>
+    </property>
+    <property name="sizePolicy">
+     <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+      <horstretch>0</horstretch>
+      <verstretch>0</verstretch>
+     </sizepolicy>
+    </property>
+    <property name="font">
+     <font>
+      <family>Sans Serif</family>
+      <pointsize>9</pointsize>
+      <weight>75</weight>
+      <italic>false</italic>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">font: bold 9pt &quot;Sans Serif&quot;;
+color:rgb(59, 59, 59);
+border: 0px solid rgb(84, 84, 84);
+</string>
+    </property>
+    <property name="text">
+     <string>Please enter a networ URL : </string>
     </property>
    </widget>
    <zorder>widget_3</zorder>
    <zorder>label_8</zorder>
    <zorder>startBtn</zorder>
-   <zorder>label_7</zorder>
    <zorder>lineEdit</zorder>
-   <zorder>label</zorder>
-   <zorder>lineEdit_2</zorder>
+   <zorder>lineEdit_9</zorder>
+   <zorder>label_5</zorder>
+   <zorder>label_12</zorder>
   </widget>
   <widget class="QLabel" name="video_label">
    <property name="geometry">

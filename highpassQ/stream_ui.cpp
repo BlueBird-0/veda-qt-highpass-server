@@ -9,18 +9,25 @@
 #include "videostream.h"
 #include "ui_videostream.h"
 #include "httpclient.h"
-stream_ui::stream_ui(QWidget *parent) :
-    QWidget(parent),
-    ui(new Ui::stream_ui)
+stream_ui::stream_ui(QWidget *parent,HttpClient* httpCli,QString streamurl) :
+    QWidget(parent),ui(new Ui::stream_ui),url(streamurl),httpClient(httpCli)
+
+{
+    qDebug()<<"!!!!! url: "<<url;
+    ui->setupUi(this);
+    ui->widget_3->hide();
+    ui->widget_2->hide();
+    rtpCli = new rtpClient();
+    rtpCli->videoLabel = ui->video_label;
+}
+stream_ui::stream_ui(QWidget *parent,HttpClient* httpCli):
+QWidget(parent),ui(new Ui::stream_ui),url(""),httpClient(httpCli)
 {
     ui->setupUi(this);
     ui->widget_3->hide();
-    url="";
     rtpCli = new rtpClient();
-    httpCli = new HttpClient(this);
     rtpCli->videoLabel = ui->video_label;
 }
-
 stream_ui::~stream_ui()
 {
     qDebug()<<"~stream_ui()";
@@ -28,7 +35,6 @@ stream_ui::~stream_ui()
     rtpCli->finishFfmpeg();
     delete ui;
     delete rtpCli;
-    delete httpCli;
      qDebug()<<"~stream_ui() finished!!";
 }
 
@@ -40,12 +46,14 @@ void stream_ui::on_startBtn_clicked()
     connect(rtpCli,SIGNAL(signal_video_start()),this,SLOT(slot_video_start()));
     connect(rtpCli,SIGNAL(signal_stream_fail()),this,SLOT(slot_streaming_fail()));
     //connect(this,SIGNAL(signal_clikQuit()),rtpCli,SLOT(slot_quitBtn()));
-    httpCli->addCamera(ui->lineEdit_2->text(),ui->lineEdit->text());
-    url = ui->lineEdit->text();
+    //httpClient->addCamera(ui->lineEdit_9->text(),ui->lineEdit->text());
+    if(url.isEmpty())
+        url = ui->lineEdit->text();
     //emit send_url(url);
     rtpCli->startFFmpegProcess(url);
     qDebug() << "start ffmpeg";
 }
+
 
 
 //void stream_ui::on_pauseBtn_clicked()
@@ -80,11 +88,13 @@ void stream_ui::slot_video_start()
    //ui->video_label->setPixmap();
 
 }
+
 void stream_ui::slot_streaming_fail()
 {
     ui->widget_2->show();
     ui->widget_3->hide();
 }
+
 void stream_ui::resizeEvent(QResizeEvent *event){
     QWidget::resizeEvent(event); // 기본 resize 이벤트 처리
 
