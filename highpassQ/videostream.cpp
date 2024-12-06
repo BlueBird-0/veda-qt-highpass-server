@@ -91,7 +91,9 @@ void videoStream:: showContextMenu(const QPoint& pos) {
        buttonLayout->addWidget(button1);
        buttonLayout->addWidget(button2);
        buttonLayout->addWidget(button3);
-
+       connect(button1,SIGNAL(clicked()),newTab,SLOT(slot_push_pause()));
+       connect(button2,SIGNAL(clicked()),newTab,SLOT(slot_push_restart()));
+       connect(button3,SIGNAL(clicked()),newTab,SLOT(slot_push_disconnect()));
        // Add the button widget to the main layout
        layout->addWidget(buttonWidget);
        // Add this tab content widget (with QTextEdit and buttons) to the tab widget
@@ -108,6 +110,7 @@ void videoStream:: showContextMenu(const QPoint& pos) {
 }
  void videoStream::slot_tab_del(stream_ui* delIndex)
  {
+
      //delIndex->rtpCli->finishFfmpeg();
      // Ensure the corresponding QTextEdit is deleted
      if (map_stream_ui.contains(delIndex)) {
@@ -120,7 +123,21 @@ void videoStream:: showContextMenu(const QPoint& pos) {
          map_textedit[delIndex->rtpCli]->deleteLater();  // Delay the deletion of the debug QTextEdit
          map_textedit.remove(delIndex->rtpCli);  // Remove from map
      }
+     QMdiSubWindow* targetSubWindow = nullptr;
+     for (QMdiSubWindow* subWindow : ui->mdiArea->subWindowList()) {
+         if (subWindow->widget() == delIndex) { // 위젯 주소 비교
+             targetSubWindow = subWindow;
+             break;
+         }
+     }
 
+     // 찾은 경우에만 삭제
+     if (targetSubWindow) {
+         ui->mdiArea->removeSubWindow(targetSubWindow);
+         targetSubWindow->deleteLater();
+     } else {
+         qDebug() << "Error: delIndex not found in QMdiArea.";
+     }
      // Optionally remove the stream_ui object from the UI
     delIndex->deleteLater();
  }
@@ -160,6 +177,9 @@ void videoStream:: showContextMenu(const QPoint& pos) {
        QPushButton* button1 = new QPushButton("Pause");
        QPushButton* button2 = new QPushButton("Restart");
        QPushButton* button3 = new QPushButton("Disconnect");
+       connect(button1,SIGNAL(clicked()),newTab,SLOT(slot_push_pause()));
+       connect(button2,SIGNAL(clicked()),newTab,SLOT(slot_push_restart()));
+       connect(button3,SIGNAL(clicked()),newTab,SLOT(slot_push_disconnect()));
 
        buttonLayout->addWidget(button1);
        buttonLayout->addWidget(button2);
@@ -176,6 +196,7 @@ void videoStream:: showContextMenu(const QPoint& pos) {
 
        connect(newTab->rtpCli, SIGNAL(signal_ffmpeg_debug(QString, rtpClient*)), this, SLOT(slot_ffmpeg_debug(QString, rtpClient*)));
        connect(newTab, SIGNAL(signal_stream_ui_del(stream_ui*)), this, SLOT(slot_tab_del(stream_ui*)));
+       //connect(newTab, SIGNAL(signal_stream_ui_del(stream_ui*)), this, SLOT(deletSubWind(stream_ui*)));
 
        qDebug() << "Created new tab with stream_ui object at address: " << newTab;
        connect(this,SIGNAL(start_stream()),newTab,SLOT(on_startBtn_clicked()));

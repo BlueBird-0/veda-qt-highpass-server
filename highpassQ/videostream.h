@@ -27,7 +27,7 @@ private slots:
     void addNewTab();
     void slot_tab_del(stream_ui*);
     void addRegistedCam();
-
+    //void deletSubWind(stream_ui* delIndex);
 private:
     Ui::videoStream *ui;
     HttpClient* httpCli;

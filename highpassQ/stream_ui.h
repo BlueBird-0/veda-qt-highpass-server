@@ -26,8 +26,9 @@ protected:
 public slots:
     void on_startBtn_clicked();
 private slots:
-
-
+    void slot_push_pause();
+    void slot_push_restart();
+    void slot_push_disconnect();
     void slot_streaming_start();
     void slot_video_start();
     void slot_streaming_fail();

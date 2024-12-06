@@ -28,6 +28,7 @@ rtpClient::~rtpClient()
 
 void rtpClient::readFFmpegOutput() {
     QByteArray data = ffmpegProcess->readAllStandardOutput();
+    // qDebug() << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!";
     if (data.isEmpty()) {
         qDebug() << "No data from ffmpeg. Check the process and arguments.";
     }
@@ -92,14 +93,16 @@ void rtpClient::startFFmpegProcess(QString url) {
     QStringList arguments;
     //#endif
 
-    // FFmpeg 명령어 설정 (rawvideo를 stdout으로 출력하도록)
     arguments << "-protocol_whitelist" << "file,tcp,udp,rtp,rtsp"
-              << "-i" << url//"rtsp://192.168.1.15:8554"
+              << "-i" << url // "rtsp://192.168.1.15:8554"
               << "-s" << "640x480"
               << "-pix_fmt" << "rgb24"  // 픽셀 포맷을 raw RGB로 설정
-              << "-f" << "rawvideo"  // 출력을 raw 비디오로 설정
-              <<"-loglevel"<<"debug"
-              << "-";  // stdout으로 출력
+              << "-b:v" << "40K"        // 비디오 비트레이트 설정 (2Mbps)
+              << "-maxrate" << "40K"    // 최대 비트레이트 설정
+              << "-bufsize" << "4M"    // 버퍼 크기 설정 (4Mbps)
+              << "-f" << "rawvideo"    // 출력을 raw 비디오로 설정
+              << "-loglevel" << "debug"
+              << "-";                  // stdout으로 출력
 
     //  FFmpeg 실행
     ffmpegProcess->start(program, arguments);
