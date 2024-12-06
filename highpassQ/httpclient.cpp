@@ -54,13 +54,14 @@ void HttpClient::addCamera(const QString &cameraName, const QString &rtspUrl)
       jsonObj["Camera_Name"] = cameraName;
       jsonObj["Camera_RTSP_URL"] = rtspUrl;
       QJsonDocument jsonDoc(jsonObj);
+      qDebug() << "Generated JSON for POST:" << jsonDoc.toJson(QJsonDocument::Compact);
 
       // POST 요청 전송
       QNetworkReply *reply = manager->post(request, jsonDoc.toJson());
 
       // 응답이 오면 onReplyFinished 슬롯으로 전달
       connect(reply, &QNetworkReply::finished, this, &HttpClient::onCameraAdded);
-
+       emit signal_finishAdd();
       // 요청 전송 디버그 로그
       qDebug() << "POST Request Sent:" << jsonDoc.toJson();
 }
@@ -107,6 +108,7 @@ void HttpClient::onCameraAdded()
          QByteArray responseData = reply->readAll();
          qDebug() << "Camera Added Response Received:" << responseData;
      } else {
+             qDebug() << "Network error:" << reply->errorString();
          qDebug() << "Error adding camera:" << reply->errorString();
      }
      reply->deleteLater();

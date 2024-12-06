@@ -26,6 +26,7 @@ private slots:
        void onReplyFinished(QNetworkReply* reply);
 signals:
        void signal_finishload();
+       void signal_finishAdd();
 };
 
 #endif // HTTPCLIENT_H
