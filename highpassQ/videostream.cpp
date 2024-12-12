@@ -105,10 +105,10 @@ void videoStream:: showContextMenu(const QPoint& pos) {
 
        connect(newTab->rtpCli, SIGNAL(signal_ffmpeg_debug(QString, rtpClient*)), this, SLOT(slot_ffmpeg_debug(QString, rtpClient*)));
        connect(newTab, SIGNAL(signal_stream_ui_del(stream_ui*)), this, SLOT(slot_tab_del(stream_ui*)));
-
-       qDebug() << "Created new tab with stream_ui object at address: " << newTab;
-}
- void videoStream::slot_tab_del(stream_ui* delIndex)
+       ui->mdiArea->tileSubWindows();
+               qDebug() << "Created new tab with stream_ui object at address: " << newTab;
+        }
+         void videoStream::slot_tab_del(stream_ui* delIndex)
  {
 
      //delIndex->rtpCli->finishFfmpeg();
@@ -197,7 +197,7 @@ void videoStream:: showContextMenu(const QPoint& pos) {
        connect(newTab->rtpCli, SIGNAL(signal_ffmpeg_debug(QString, rtpClient*)), this, SLOT(slot_ffmpeg_debug(QString, rtpClient*)));
        connect(newTab, SIGNAL(signal_stream_ui_del(stream_ui*)), this, SLOT(slot_tab_del(stream_ui*)));
        //connect(newTab, SIGNAL(signal_stream_ui_del(stream_ui*)), this, SLOT(deletSubWind(stream_ui*)));
-
+        ui->mdiArea->tileSubWindows();
        qDebug() << "Created new tab with stream_ui object at address: " << newTab;
        connect(this,SIGNAL(start_stream()),newTab,SLOT(on_startBtn_clicked()));
        emit start_stream();
